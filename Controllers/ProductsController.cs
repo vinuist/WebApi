@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Cors;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -22,7 +23,7 @@ namespace WebApi.Controllers
             _productsRepository = productsRepository;
         }
 
-       
+        [Authorize]
         [HttpGet]  // swagger arayüzü için httpget yazılmalı mutlaka yoksa ambiguous hatası veriyor iki tane get olunca
         public async Task<IActionResult> GetAll()
         {
@@ -31,8 +32,8 @@ namespace WebApi.Controllers
             return Ok(list);
         }
 
+        [Authorize(Roles ="Admin")]
         [HttpGet("{id}")]
-
         public async Task<IActionResult> GetById(int id)
         {
             var data= await _productsRepository.GetByIdAsync(id);
